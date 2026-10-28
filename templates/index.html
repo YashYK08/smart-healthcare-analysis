@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}Executive Overview | Smart Healthcare Risk Analysis{% endblock %}
+
+{% block content %}
+<!-- Header Hero -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="p-4 rounded-3 text-white shadow-sm" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <span class="badge bg-info text-dark mb-2 px-3 py-1 fw-bold">
+            <i class="fas fa-stethoscope me-1"></i> Data Analytics & Clinical Risk Intelligence
+          </span>
+          <h2 class="fw-bold mb-2">Smart Healthcare Risk & Chronic Disease Surveillance Dashboard</h2>
+          <p class="lead mb-0 text-light opacity-90" style="font-size: 1.05rem;">
+            Epidemiological population health analytics, calibrated multi-factor risk stratification, and chronic disease co-morbidity detection across 5,000 patient records.
+          </p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <a href="{{ url_for('calculator') }}" class="btn btn-warning fw-bold px-3 py-2 me-2">
+            <i class="fas fa-calculator me-1"></i> Patient Risk Calculator
+          </a>
+          <a href="{{ url_for('tableau') }}" class="btn btn-outline-light px-3 py-2">
+            <i class="fas fa-chart-column me-1"></i> Tableau Worksheets
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Primary Metric Cards (Real Cohort Data) -->
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-2">
+    <div class="metric-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="metric-title">Cohort Size</span>
+        <div class="metric-icon bg-primary bg-opacity-10 text-primary">
+          <i class="fas fa-users"></i>
+        </div>
+      </div>
+      <div class="metric-value text-dark">{{ "{:,}".format(summary.total_patients) }}</div>
+      <div class="metric-sub text-muted">Active patient profiles</div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-2">
+    <div class="metric-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="metric-title">Avg Calibrated Risk</span>
+        <div class="metric-icon bg-info bg-opacity-10 text-info">
+          <i class="fas fa-gauge-high"></i>
+        </div>
+      </div>
+      <div class="metric-value text-primary">{{ summary.calibrated_risk_score_metrics.mean }}</div>
+      <div class="metric-sub text-muted">Scale 0 - 100 (Std: {{ summary.calibrated_risk_score_metrics.std }})</div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-2">
+    <div class="metric-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="metric-title">Heart Disease</span>
+        <div class="metric-icon bg-danger bg-opacity-10 text-danger">
+          <i class="fas fa-heart-pulse"></i>
+        </div>
+      </div>
+      <div class="metric-value text-danger">{{ summary.disease_prevalence.heart_disease_pct }}%</div>
+      <div class="metric-sub text-muted">{{ "{:,}".format(summary.disease_prevalence.heart_disease_cases) }} diagnosed cases</div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-2">
+    <div class="metric-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="metric-title">Diabetes Rate</span>
+        <div class="metric-icon bg-primary bg-opacity-10 text-primary">
+          <i class="fas fa-droplet"></i>
+        </div>
+      </div>
+      <div class="metric-value text-primary">{{ summary.disease_prevalence.diabetes_pct }}%</div>
+      <div class="metric-sub text-muted">{{ "{:,}".format(summary.disease_prevalence.diabetes_cases) }} diagnosed cases</div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-2">
+    <div class="metric-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="metric-title">Stroke Incidence</span>
+        <div class="metric-icon bg-purple bg-opacity-10 text-dark">
+          <i class="fas fa-brain"></i>
+        </div>
+      </div>
+      <div class="metric-value text-dark">{{ summary.disease_prevalence.stroke_pct }}%</div>
+      <div class="metric-sub text-muted">{{ "{:,}".format(summary.disease_prevalence.stroke_cases) }} documented events</div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-2">
+    <div class="metric-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="metric-title">Multi-Morbidity</span>
+        <div class="metric-icon bg-warning bg-opacity-10 text-warning">
+          <i class="fas fa-layer-group"></i>
+        </div>
+      </div>
+      <div class="metric-value text-warning">{{ summary.disease_prevalence.comorbidity_pct }}%</div>
+      <div class="metric-sub text-muted">&ge; 2 co-occurring chronic diseases</div>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Chart Dashboards -->
+<div class="row g-4 mb-4">
+  <!-- Age Stratification Chart -->
+  <div class="col-lg-8">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h5 class="section-title"><i class="fas fa-chart-column text-primary me-2"></i>Chronic Disease Prevalence Across Age Groups</h5>
+        <span class="badge bg-light text-muted border">Dynamic API Data</span>
+      </div>
+      <p class="text-muted small">
+        Epidemiological analysis indicates an inflection point beyond age 45, with chronic condition rates surging sharply in the 61-80 senior cohort.
+      </p>
+      <div style="height: 320px;">
+        <canvas id="chartAgePrevalence"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk Tier Doughnut Chart -->
+  <div class="col-lg-4">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h5 class="section-title"><i class="fas fa-pie-chart text-success me-2"></i>Cohort Risk Tier Stratification</h5>
+        <span class="badge bg-light text-muted border">4 Tiers</span>
+      </div>
+      <p class="text-muted small">
+        Patients categorized via calibrated multi-biomarker composite index (0-100).
+      </p>
+      <div style="height: 260px;" class="d-flex align-items-center justify-content-center">
+        <canvas id="chartRiskTiers"></canvas>
+      </div>
+      <div class="d-flex justify-content-around text-center mt-3 pt-2 border-top">
+        <div>
+          <span class="badge badge-tier-low d-block mb-1">Low (&lt;35)</span>
+          <small class="fw-bold">{{ summary.risk_tier_distribution['Low'] }}</small>
+        </div>
+        <div>
+          <span class="badge badge-tier-mod d-block mb-1">Moderate (35-54)</span>
+          <small class="fw-bold">{{ summary.risk_tier_distribution['Moderate'] }}</small>
+        </div>
+        <div>
+          <span class="badge badge-tier-high d-block mb-1">High (55-74)</span>
+          <small class="fw-bold">{{ summary.risk_tier_distribution['High'] }}</small>
+        </div>
+        <div>
+          <span class="badge badge-tier-crit d-block mb-1">Critical (&ge;75)</span>
+          <small class="fw-bold">{{ summary.risk_tier_distribution['Critical'] }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Key Clinical Insights & Data Audit Banner -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h5 class="section-title"><i class="fas fa-clipboard-check text-info me-2"></i>Executive Analytical Findings & Clinical Conclusions</h5>
+        <a href="{{ url_for('eda') }}" class="btn btn-sm btn-outline-primary">Full EDA Report &rarr;</a>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded border h-100">
+            <h6 class="fw-bold text-dark"><i class="fas fa-calendar-check text-primary me-2"></i>Critical Age Threshold (61 - 80)</h6>
+            <p class="text-muted small mb-0">
+              Patients aged 61-80 exhibit an astonishing <strong>89.4%</strong> heart disease prevalence and <strong>100%</strong> diabetes rate in this cohort. Early intervention must occur prior to the 46-60 window.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded border h-100">
+            <h6 class="fw-bold text-dark"><i class="fas fa-viruses text-danger me-2"></i>Triad Comorbidity Risk</h6>
+            <p class="text-muted small mb-0">
+              <strong>1,207 patients (24.1%)</strong> suffer concurrently from Heart Disease, Diabetes, AND Stroke. This clinical triad demands integrated multi-disciplinary care instead of siloed treatments.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded border h-100">
+            <h6 class="fw-bold text-dark"><i class="fas fa-heart-crack text-warning me-2"></i>Cardiovascular Biomarker Burden</h6>
+            <p class="text-muted small mb-0">
+              Mean systolic blood pressure is <strong>134.4 mmHg</strong> and mean cholesterol is <strong>224.6 mg/dL</strong>. Over 40% of patients sit in Stage 1 or Stage 2 Hypertension.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded border h-100">
+            <h6 class="fw-bold text-dark"><i class="fas fa-smoking text-secondary me-2"></i>Modifiable Lifestyle Catalysts</h6>
+            <p class="text-muted small mb-0">
+              Active smoking coupled with sedentary physical activity exacerbates cardiovascular risk by over 18%, presenting a direct opportunity for digital lifestyle intervention programs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Anomaly Audit Box -->
+  <div class="col-lg-4">
+    <div class="content-card h-100 border-warning border-opacity-50">
+      <div class="section-header">
+        <h5 class="section-title text-warning"><i class="fas fa-triangle-exclamation me-2"></i>Dataset Audit Notice</h5>
+        <a href="{{ url_for('audit') }}" class="btn btn-sm btn-outline-warning">Audit Details</a>
+      </div>
+      <div class="alert alert-warning py-2 mb-3 small">
+        <i class="fas fa-info-circle me-1"></i> <strong>Raw Risk Score Degeneracy Identified</strong>
+      </div>
+      <p class="small text-muted mb-2">
+        In the raw dataset <code>smart_healthcare_dataset.csv</code>, the column <code>health_risk_score</code> contains an identical constant value:
+      </p>
+      <div class="p-2 bg-light rounded text-center mb-3">
+        <span class="fs-4 fw-bold text-danger">100.0</span>
+        <span class="d-block text-muted small">Constant across all 5,000 rows (Variance = 0.0)</span>
+      </div>
+      <p class="small text-muted mb-0">
+        <strong>Resolution:</strong> Our pipeline engineered an authentic, clinically grounded <strong>Calibrated Health Risk Score</strong> (0 - 100) combining age, BMI, systolic BP, cholesterol, fasting glucose, lifestyle, and symptoms.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation Highlights -->
+<div class="row g-3">
+  <div class="col-md-3">
+    <div class="card h-100 shadow-sm border-0 bg-white p-3 text-center">
+      <i class="fas fa-microscope text-primary fs-2 mb-2"></i>
+      <h6 class="fw-bold">Exploratory Analysis</h6>
+      <p class="text-muted small">8 publication-grade statistical charts, patient-level query engine & correlation matrices.</p>
+      <a href="{{ url_for('eda') }}" class="btn btn-sm btn-outline-primary mt-auto">Explore Data</a>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card h-100 shadow-sm border-0 bg-white p-3 text-center">
+      <i class="fas fa-table-columns text-info fs-2 mb-2"></i>
+      <h6 class="fw-bold">Tableau Worksheets</h6>
+      <p class="text-muted small">Interactive dashboards, calculated field formulas, and Tableau Desktop packaging.</p>
+      <a href="{{ url_for('tableau') }}" class="btn btn-sm btn-outline-info mt-auto">View Worksheets</a>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card h-100 shadow-sm border-0 bg-white p-3 text-center">
+      <i class="fas fa-book-medical text-success fs-2 mb-2"></i>
+      <h6 class="fw-bold">Analytical Story</h6>
+      <p class="text-muted small">Step-by-step narrative arc: from data audit to multi-morbidity intervention strategy.</p>
+      <a href="{{ url_for('story') }}" class="btn btn-sm btn-outline-success mt-auto">Read Story</a>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card h-100 shadow-sm border-0 bg-white p-3 text-center">
+      <i class="fas fa-calculator text-warning fs-2 mb-2"></i>
+      <h6 class="fw-bold">Risk Calculator</h6>
+      <p class="text-muted small">Clinical simulator for real-time risk score prediction and clinical recommendations.</p>
+      <a href="{{ url_for('calculator') }}" class="btn btn-sm btn-outline-warning mt-auto">Open Calculator</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

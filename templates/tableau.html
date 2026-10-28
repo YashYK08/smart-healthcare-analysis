@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau Analytics | Smart Healthcare Risk Analysis{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+      <div>
+        <h3 class="fw-bold text-dark mb-1"><i class="fas fa-table-columns text-info me-2"></i>Tableau Visualizations, Dashboards & Story</h3>
+        <p class="text-muted small mb-0">Local workbook architecture, publishing workflow guide, and interactive embedded analytical dashboard.</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="{{ url_for('download_twbx') }}" class="btn btn-warning btn-sm fw-bold">
+          <i class="fas fa-box-archive me-1"></i> Download project.twbx
+        </a>
+        <a href="{{ url_for('download_twb') }}" class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-file-code me-1"></i> Download .twb
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Transparent Publishing Status Alert (Requirement 11) -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="alert alert-info border-info d-flex align-items-start gap-3 shadow-sm mb-0">
+      <div class="fs-3 text-info mt-1"><i class="fas fa-circle-info"></i></div>
+      <div class="flex-grow-1">
+        <h6 class="fw-bold mb-1">Tableau Workbook Status & Desktop Publishing Guide</h6>
+        <p class="small mb-2">
+          <strong>Notice of Transparency:</strong> The Tableau Workbook XML (<code>smart_healthcare_analysis.twb</code>) and the packaged archive (<code>project.twbx</code>) are prepared and bundled with the verified 5,000-record dataset and custom calculated fields. In accordance with strict academic integrity, <em>publishing to Tableau Public requires an active Tableau user account and manual authentication</em> in Tableau Desktop.
+        </p>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+          <span class="badge bg-dark">Step 1: Open <code>project.twbx</code> in Tableau Desktop / Public</span>
+          <span class="badge bg-dark">Step 2: Review Dashboards & Story</span>
+          <span class="badge bg-dark">Step 3: Click 'Server &rarr; Publish Workbook'</span>
+          <span class="badge bg-success">Step 4: Paste live Public URL below to embed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Tableau Embed Input Bar -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="content-card py-3">
+      <div class="row align-items-center g-2">
+        <div class="col-md-3">
+          <label class="form-label mb-0 fw-bold small text-dark"><i class="fas fa-globe me-1 text-primary"></i>Live Tableau Public URL:</label>
+        </div>
+        <div class="col-md-7">
+          <input type="url" id="inputTableauUrl" class="form-control form-control-sm" placeholder="e.g. https://public.tableau.com/views/SmartHealthcareRiskAnalysis/Dashboard1?:showVizHome=no&:embed=true">
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+          <button id="btnApplyCustomTableau" class="btn btn-primary btn-sm flex-grow-1">
+            <i class="fas fa-play me-1"></i> Embed
+          </button>
+          <button id="btnResetTableauSimulation" class="btn btn-outline-secondary btn-sm" title="Reset to Interactive Simulation">
+            <i class="fas fa-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dynamic Embed Container (Hidden until user pastes URL) -->
+<div id="tableauIframeContainer" class="row mb-4 d-none">
+  <div class="col-12">
+    <div class="tableau-embed-wrapper">
+      <div class="p-2 bg-dark text-white d-flex justify-content-between align-items-center px-3">
+        <span class="small fw-bold"><i class="fas fa-cloud me-2 text-info"></i>Live Tableau Public Stream</span>
+        <span class="badge bg-success">Connected</span>
+      </div>
+      <iframe id="tableauIframe" src="" width="100%" height="750" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Local Interactive Simulation & Worksheets View -->
+<div id="tableauLocalSimulation">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="content-card">
+        <div class="section-header">
+          <div>
+            <h5 class="section-title"><i class="fas fa-desktop text-primary me-2"></i>Dashboard 1: Clinical Risk & Biomarker Surveillance (Interactive Mirror)</h5>
+            <span class="text-muted small">Real-time browser rendering reflecting the exact Tableau worksheets configured in <code>smart_healthcare_analysis.twb</code>.</span>
+          </div>
+          <span class="badge bg-primary">Full Interactive Mode</span>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <div class="p-3 border rounded bg-light">
+              <h6 class="fw-bold mb-2 text-dark"><i class="fas fa-chart-bar text-danger me-1"></i>Worksheet 1: Chronic Disease Prevalence by Age Group</h6>
+              <div style="height: 260px;">
+                <canvas id="chartAgePrevalence"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="p-3 border rounded bg-light">
+              <h6 class="fw-bold mb-2 text-dark"><i class="fas fa-chart-pie text-info me-1"></i>Worksheet 2: Calibrated Risk Tier Breakdown</h6>
+              <div style="height: 260px;" class="d-flex align-items-center justify-content-center">
+                <canvas id="chartRiskTiers"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="p-3 border rounded bg-light">
+              <h6 class="fw-bold mb-2 text-dark"><i class="fas fa-stethoscope text-success me-1"></i>Worksheet 3: Blood Pressure Clinical Classification Distribution</h6>
+              <div style="height: 220px;">
+                <canvas id="chartBpCategories"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard 2 Preview: Population Health & Lifestyle Matrix -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="content-card">
+        <div class="section-header">
+          <div>
+            <h5 class="section-title"><i class="fas fa-heart-pulse text-danger me-2"></i>Dashboard 2: Population Health & Lifestyle Comorbidity Matrix</h5>
+            <span class="text-muted small">Worksheet views connecting modifiable behavioral risk factors to clinical outcomes.</span>
+          </div>
+          <span class="badge bg-secondary">Worksheets 4-8</span>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 border rounded bg-light text-center h-100">
+              <span class="text-muted small text-uppercase fw-bold">Sedentary Smokers</span>
+              <h4 class="fw-bold text-danger mt-2 mb-1">36.8%</h4>
+              <p class="text-muted small mb-0">Highest cardiovascular event incidence rate</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 border rounded bg-light text-center h-100">
+              <span class="text-muted small text-uppercase fw-bold">Triad Comorbidity</span>
+              <h4 class="fw-bold text-warning mt-2 mb-1">1,207</h4>
+              <p class="text-muted small mb-0">Patients with HD + Diabetes + Stroke (24.1%)</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 border rounded bg-light text-center h-100">
+              <span class="text-muted small text-uppercase fw-bold">Isolated Disease</span>
+              <h4 class="fw-bold text-info mt-2 mb-1">289</h4>
+              <p class="text-muted small mb-0">Patients with exactly 1 diagnosed condition (5.8%)</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="p-3 border rounded bg-light text-center h-100">
+              <span class="text-muted small text-uppercase fw-bold">Healthy Baseline</span>
+              <h4 class="fw-bold text-success mt-2 mb-1">3,215</h4>
+              <p class="text-muted small mb-0">Patients free from chronic disease events (64.3%)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+          <div class="col-md-6">
+            <img src="{{ url_for('static', filename='img/visualizations/fig4_lifestyle_impact_heart_disease.png') }}" class="img-fluid rounded border" alt="Lifestyle Matrix">
+          </div>
+          <div class="col-md-6">
+            <img src="{{ url_for('static', filename='img/visualizations/fig5_comorbidity_trivariate_overlap.png') }}" class="img-fluid rounded border" alt="Comorbidity Distribution">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tableau Calculated Fields Reference Panel -->
+<div class="row">
+  <div class="col-12">
+    <div class="content-card">
+      <div class="section-header">
+        <h5 class="section-title"><i class="fas fa-calculator text-primary me-2"></i>Tableau Workbook Calculated Fields Specification</h5>
+        <span class="badge bg-light text-muted border">8 Custom Calculated Fields</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm small mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 25%;">Calculated Field Name</th>
+              <th style="width: 45%;">Tableau Formula</th>
+              <th style="width: 30%;">Clinical Justification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fw-bold font-monospace">[Calibrated Risk Score]</td>
+              <td class="font-monospace text-primary">(([age] - 18) / 61 * 25) + MIN(30, ([heart_disease] + [diabetes] + [stroke]) * 10) + (IF [blood_pressure] >= 140 THEN 8 ELSEIF [blood_pressure] >= 130 THEN 5 ELSEIF [blood_pressure] >= 120 THEN 2 ELSE 0 END) + ...</td>
+              <td>Multi-factor clinical risk index replacing the degenerate constant raw score. Scaled 0-100.</td>
+            </tr>
+            <tr>
+              <td class="fw-bold font-monospace">[Risk Tier]</td>
+              <td class="font-monospace text-primary">IF [Calibrated Risk Score] &lt; 35 THEN 'Low' ELSEIF [Calibrated Risk Score] &lt; 55 THEN 'Moderate' ELSEIF [Calibrated Risk Score] &lt; 75 THEN 'High' ELSE 'Critical' END</td>
+              <td>Stratifies patient population into 4 actionable clinical priority tiers.</td>
+            </tr>
+            <tr>
+              <td class="fw-bold font-monospace">[Cardiovascular Risk Flag]</td>
+              <td class="font-monospace text-primary">IF [blood_pressure] &gt;= 140 OR [cholesterol] &gt;= 240 THEN 'Elevated CVD Risk' ELSE 'Normal CVD Risk' END</td>
+              <td>Identifies hypertension or hypercholesterolemia requiring cardiology referral.</td>
+            </tr>
+            <tr>
+              <td class="fw-bold font-monospace">[Metabolic Syndrome Marker]</td>
+              <td class="font-monospace text-primary">IF [bmi] &gt;= 30.0 AND [glucose] &gt;= 126 AND [blood_pressure] &gt;= 130 THEN 'High Metabolic Risk' ELSE 'Standard' END</td>
+              <td>Flags triad of obesity, hyperglycemia, and elevated blood pressure.</td>
+            </tr>
+            <tr>
+              <td class="fw-bold font-monospace">[Comorbidity Flag]</td>
+              <td class="font-monospace text-primary">IF ([heart_disease] + [diabetes] + [stroke]) &gt;= 2 THEN 1 ELSE 0 END</td>
+              <td>Flags dual or triple chronic condition presence for integrated care delivery.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

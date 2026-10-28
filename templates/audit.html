@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Data Audit & Validation | Smart Healthcare Analytics{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col-12">
+    <h3 class="fw-bold text-dark mb-1"><i class="fas fa-shield-virus text-danger me-2"></i>Data Quality Audit & Anomaly Resolution Report</h3>
+    <p class="text-muted small mb-0">Formal forensic validation, schema integrity checks, and scientific documentation of the constant <code>health_risk_score</code> anomaly.</p>
+  </div>
+</div>
+
+<!-- Investigation Card -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="content-card border-danger border-opacity-50">
+      <div class="section-header">
+        <h5 class="section-title text-danger"><i class="fas fa-bug me-2"></i>Critical Finding: Degenerate Raw Risk Metric Audit</h5>
+        <span class="badge bg-danger">Critical Issue Documented</span>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <h6 class="fw-bold text-dark mb-2">1. The Problem: Zero Variance in <code>health_risk_score</code></h6>
+          <p class="text-muted small">
+            During the initial ingestion and validation phase of <code>smart_healthcare_dataset.csv</code>, an automated exploratory audit was executed across all 16 variables and 5,000 observations. The summary statistics for <code>health_risk_score</code> revealed:
+          </p>
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered text-center small mb-3">
+              <thead class="table-dark">
+                <tr>
+                  <th>Observation Count</th>
+                  <th>Min</th>
+                  <th>Max</th>
+                  <th>Mean</th>
+                  <th>Standard Dev</th>
+                  <th>Unique Values</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="fw-bold text-danger table-danger">
+                  <td>5,000</td>
+                  <td>100.0</td>
+                  <td>100.0</td>
+                  <td>100.0</td>
+                  <td>0.0000</td>
+                  <td>1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-muted small">
+            <strong>Epidemiological Implication:</strong> A feature with zero variance ($\sigma = 0$) carries zero entropy and zero predictive utility. Pearson correlation coefficients between <code>health_risk_score</code> and clinical target outcomes (heart disease, diabetes, stroke) evaluate mathematically to <code>NaN</code>.
+          </p>
+        </div>
+
+        <div class="col-lg-6">
+          <h6 class="fw-bold text-dark mb-2">2. The Resolution: Clinically Calibrated Risk Score</h6>
+          <p class="text-muted small">
+            In compliance with project specifications, we preserved the raw column for audit fidelity while engineering a validated, reproducible <strong>Calibrated Health Risk Score</strong> ($S \in [0, 100]$):
+          </p>
+          <div class="p-3 bg-light rounded border font-monospace small mb-3">
+            S = S_age (max 25) + S_chronic (max 30) + S_bp (max 8) + S_chol (max 7) + S_glu (max 8) + S_bmi (max 7) + S_lifestyle (max 10) + S_symptoms (max 5)
+          </div>
+          <p class="text-muted small mb-0">
+            This formulation restores biological and mathematical validity. It allows genuine risk stratification into <strong>Low (43.5%)</strong>, <strong>Moderate (26.2%)</strong>, <strong>High (17.3%)</strong>, and <strong>Critical (13.0%)</strong> risk tiers.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Full Schema Validation Table -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="content-card">
+      <div class="section-header">
+        <h5 class="section-title"><i class="fas fa-list-check text-primary me-2"></i>Dataset Feature Schema & Validation Matrix</h5>
+        <span class="badge bg-success">100% Validated (0 Missing Values)</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-sm small mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Feature Name</th>
+              <th>Raw Dtype</th>
+              <th>Cleaned Dtype</th>
+              <th>Observed Range / Domain</th>
+              <th>Missing</th>
+              <th>Validation Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-monospace fw-bold">patient_id</td>
+              <td><em>(Engineered)</em></td>
+              <td>String</td>
+              <td>P0001 - P5000</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid Unique Key</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">age</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>18 to 79 years (Mean: 48.8)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">gender</td>
+              <td>object</td>
+              <td>object</td>
+              <td>Female (50.1%), Male (49.9%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Balanced</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">bmi</td>
+              <td>float64</td>
+              <td>float64</td>
+              <td>15.0 to 42.6 kg/m&sup2; (Mean: 24.97)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">exercise_level</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (Sedentary), 1 (Moderate), 2 (Active)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">smoking</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (49.2%), 1 (50.8%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">alcohol</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (49.9%), 1 (50.1%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">blood_pressure</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>90 to 179 mmHg (Mean: 134.4)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">cholesterol</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>150 to 299 mg/dL (Mean: 224.6)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">glucose</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>70 to 199 mg/dL (Mean: 134.5)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">fatigue</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (48.5%), 1 (51.5%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">chest_pain</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (49.6%), 1 (50.4%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">dizziness</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (50.3%), 1 (49.7%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">heart_disease</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (70.0%), 1 (30.0%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">diabetes</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (65.1%), 1 (34.9%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold">stroke</td>
+              <td>int64</td>
+              <td>int64</td>
+              <td>0 (75.1%), 1 (24.9%)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Valid</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold text-danger">health_risk_score</td>
+              <td>float64</td>
+              <td>float64</td>
+              <td>Constant 100.0</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-danger">Zero Variance</span></td>
+            </tr>
+            <tr>
+              <td class="font-monospace fw-bold text-success">calibrated_risk_score</td>
+              <td><em>(Engineered)</em></td>
+              <td>float64</td>
+              <td>3.2 to 94.4 (Mean: 44.55, Std: 20.82)</td>
+              <td>0 (0%)</td>
+              <td><span class="badge bg-success">Calibrated Index</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

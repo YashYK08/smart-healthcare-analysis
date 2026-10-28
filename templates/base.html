@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Smart Healthcare Risk & Disease Analysis{% endblock %}</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Custom Project Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2 shadow-sm sticky-top">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+        <span class="bg-primary text-white rounded-circle p-2 me-2 d-inline-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="fas fa-heartbeat"></i>
+        </span>
+        <span>Smart<span class="text-info">Health</span> Analytics</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'index' %}active text-white{% endif %}" href="{{ url_for('index') }}">
+              <i class="fas fa-chart-pie me-1"></i> Executive Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'eda' %}active text-white{% endif %}" href="{{ url_for('eda') }}">
+              <i class="fas fa-microscope me-1"></i> Exploratory Analysis
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'tableau' %}active text-white{% endif %}" href="{{ url_for('tableau') }}">
+              <i class="fas fa-table-columns me-1"></i> Tableau Analytics
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'story' %}active text-white{% endif %}" href="{{ url_for('story') }}">
+              <i class="fas fa-book-medical me-1"></i> Analytical Story
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'calculator' %}active text-white{% endif %}" href="{{ url_for('calculator') }}">
+              <i class="fas fa-calculator me-1"></i> Risk Calculator
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'audit' %}active text-white{% endif %}" href="{{ url_for('audit') }}">
+              <i class="fas fa-shield-virus me-1"></i> Data Audit & Validation
+            </a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2">
+          <div class="dropdown">
+            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              <i class="fas fa-download me-1"></i> Downloads
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li><a class="dropdown-item" href="{{ url_for('download_cleaned_data') }}"><i class="fas fa-file-csv me-2 text-success"></i>Cleaned Dataset (.csv)</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('download_twbx') }}"><i class="fas fa-box-archive me-2 text-warning"></i>Packaged Tableau (.twbx)</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('download_twb') }}"><i class="fas fa-file-code me-2 text-info"></i>Tableau Workbook (.twb)</a></li>
+            </ul>
+          </div>
+          <span class="badge bg-primary text-white py-2 px-3 border border-light">
+            <i class="fas fa-users me-1"></i> N = 5,000 Cohort
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container-fluid px-4 py-4 flex-grow-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="text-center py-3">
+    <div class="container-fluid px-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <div class="text-muted small">
+        <strong>Smart Healthcare Risk & Disease Analysis</strong> | Capstone College Project | Clinical Informatics Division
+      </div>
+      <div class="text-muted small">
+        <i class="fas fa-check-circle text-success me-1"></i> Verified on 5,000 Patient Cohort Records | Python, Pandas, Flask & Tableau
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Chart.js 4 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Main Project Script -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

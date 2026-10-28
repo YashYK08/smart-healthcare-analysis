@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Exploratory Analysis | Smart Healthcare Analytics{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+      <div>
+        <h3 class="fw-bold text-dark mb-1"><i class="fas fa-microscope text-primary me-2"></i>Exploratory Data Analysis & Epidemiological Findings</h3>
+        <p class="text-muted small mb-0">Rigorous statistical distributions, biomarker correlations, and patient-level cohort records across 5,000 observations.</p>
+      </div>
+      <div>
+        <a href="{{ url_for('download_cleaned_data') }}" class="btn btn-success btn-sm">
+          <i class="fas fa-download me-1"></i> Download Cleaned Dataset (.csv)
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Visualization Gallery (8 Figures) -->
+<div class="row g-4 mb-4">
+  <!-- Fig 1: Age vs Disease -->
+  <div class="col-lg-6">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h6 class="section-title"><i class="fas fa-chart-bar text-primary me-2"></i>Fig 1: Disease Prevalence by Age Group</h6>
+        <span class="badge bg-secondary">Prevalence (%)</span>
+      </div>
+      <img src="{{ url_for('static', filename='img/visualizations/fig1_disease_prevalence_by_age.png') }}" class="img-fluid rounded mb-3 border" alt="Disease Prevalence by Age">
+      <div class="p-3 bg-light rounded small">
+        <strong>Key Observation:</strong> No chronic conditions are recorded in patients below age 45. The 46-60 group represents the clinical onset stage (14.6% diabetes, 7.8% heart disease), while patients aged 61-80 present a massive prevalence surge: 89.4% heart disease, 100% diabetes, and 79.1% stroke.
+      </div>
+    </div>
+  </div>
+
+  <!-- Fig 2: Calibrated Risk Distribution -->
+  <div class="col-lg-6">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h6 class="section-title"><i class="fas fa-chart-line text-info me-2"></i>Fig 2: Calibrated Health Risk Score Distribution</h6>
+        <span class="badge bg-secondary">KDE Histogram</span>
+      </div>
+      <img src="{{ url_for('static', filename='img/visualizations/fig2_calibrated_risk_distribution.png') }}" class="img-fluid rounded mb-3 border" alt="Risk Score Distribution">
+      <div class="p-3 bg-light rounded small">
+        <strong>Key Observation:</strong> The calibrated score resolves the constant 100.0 raw metric by engineering a 0-100 clinical index (Mean: 44.55, Std: 20.82, Range: 3.2 - 94.4). The cohort stratifies into Low (43.5%), Moderate (26.2%), High (17.3%), and Critical (13.0%) risk tiers.
+      </div>
+    </div>
+  </div>
+
+  <!-- Fig 3: Biomarker Correlation Heatmap -->
+  <div class="col-lg-6">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h6 class="section-title"><i class="fas fa-table-cells text-warning me-2"></i>Fig 3: Biomarker & Disease Correlation Matrix</h6>
+        <span class="badge bg-secondary">Pearson r</span>
+      </div>
+      <img src="{{ url_for('static', filename='img/visualizations/fig3_biomarker_correlation_matrix.png') }}" class="img-fluid rounded mb-3 border" alt="Correlation Matrix">
+      <div class="p-3 bg-light rounded small">
+        <strong>Key Observation:</strong> Chronic conditions show exceptional collinearity: Heart Disease and Diabetes correlate at <code>r = 0.86</code>, and Heart Disease and Stroke correlate at <code>r = 0.84</code>. Age is the strongest primary predictor of disease emergence (<code>r = 0.75 - 0.82</code>).
+      </div>
+    </div>
+  </div>
+
+  <!-- Fig 4: Lifestyle Impact -->
+  <div class="col-lg-6">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h6 class="section-title"><i class="fas fa-smoking text-danger me-2"></i>Fig 4: Smoking & Physical Activity vs Heart Disease</h6>
+        <span class="badge bg-secondary">Cross-tabulation</span>
+      </div>
+      <img src="{{ url_for('static', filename='img/visualizations/fig4_lifestyle_impact_heart_disease.png') }}" class="img-fluid rounded mb-3 border" alt="Lifestyle Impact">
+      <div class="p-3 bg-light rounded small">
+        <strong>Key Observation:</strong> Active smokers with sedentary exercise patterns face the highest incidence of adverse cardiovascular events. Transitioning from sedentary to active lifestyle reduces disease burden across both smoking and non-smoking sub-cohorts.
+      </div>
+    </div>
+  </div>
+
+  <!-- Fig 5: Comorbidity Breakdown -->
+  <div class="col-lg-6">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h6 class="section-title"><i class="fas fa-layer-group text-success me-2"></i>Fig 5: Multi-Morbidity Triad Distribution</h6>
+        <span class="badge bg-secondary">Cohort Counts</span>
+      </div>
+      <img src="{{ url_for('static', filename='img/visualizations/fig5_comorbidity_trivariate_overlap.png') }}" class="img-fluid rounded mb-3 border" alt="Comorbidity Breakdown">
+      <div class="p-3 bg-light rounded small">
+        <strong>Key Observation:</strong> 3,215 patients (64.3%) present with zero chronic conditions; 289 have isolated disease, 289 suffer from dual morbidity, and 1,207 (24.1%) exhibit the complete triad of Heart Disease, Diabetes, and Stroke simultaneously.
+      </div>
+    </div>
+  </div>
+
+  <!-- Fig 6: BP vs Glucose by Tier -->
+  <div class="col-lg-6">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h6 class="section-title"><i class="fas fa-circle-dot text-danger me-2"></i>Fig 6: Blood Pressure vs Fasting Glucose Trajectories</h6>
+        <span class="badge bg-secondary">Risk Tier Clusters</span>
+      </div>
+      <img src="{{ url_for('static', filename='img/visualizations/fig6_blood_pressure_vs_glucose_by_tier.png') }}" class="img-fluid rounded mb-3 border" alt="BP vs Glucose">
+      <div class="p-3 bg-light rounded small">
+        <strong>Key Observation:</strong> Critical and High-risk patients cluster heavily above the clinical thresholds of 140 mmHg systolic blood pressure and 126 mg/dL fasting plasma glucose, validating the biological coherence of our risk stratification model.
+      </div>
+    </div>
+  </div>
+
+  <!-- Fig 7: Symptoms vs Disease Burden -->
+  <div class="col-lg-6">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h6 class="section-title"><i class="fas fa-head-side-cough text-info me-2"></i>Fig 7: Symptom Presentation vs Chronic Disease Burden</h6>
+        <span class="badge bg-secondary">Symptom Rates</span>
+      </div>
+      <img src="{{ url_for('static', filename='img/visualizations/fig7_symptom_frequency_by_chronic_disease.png') }}" class="img-fluid rounded mb-3 border" alt="Symptoms vs Disease">
+      <div class="p-3 bg-light rounded small">
+        <strong>Key Observation:</strong> Chest pain and fatigue report rates remain consistently around 50% across cohorts. However, the combination of multiple symptoms within patients having elevated biomarkers strongly correlates with higher risk tiers.
+      </div>
+    </div>
+  </div>
+
+  <!-- Fig 8: BMI vs Cholesterol Risk Scatter -->
+  <div class="col-lg-6">
+    <div class="content-card h-100">
+      <div class="section-header">
+        <h6 class="section-title"><i class="fas fa-weight-scale text-primary me-2"></i>Fig 8: BMI vs Total Cholesterol Mapped to Risk Score</h6>
+        <span class="badge bg-secondary">Continuous Gradient</span>
+      </div>
+      <img src="{{ url_for('static', filename='img/visualizations/fig8_bmi_vs_cholesterol_risk_scatter.png') }}" class="img-fluid rounded mb-3 border" alt="BMI vs Cholesterol">
+      <div class="p-3 bg-light rounded small">
+        <strong>Key Observation:</strong> High BMI (&ge; 30.0) combined with hypercholesterolemia (&ge; 240 mg/dL) shifts patients into the upper 75th percentile of calibrated risk, illustrating compound metabolic syndrome danger.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Patient Data Explorer -->
+<div class="row">
+  <div class="col-12">
+    <div class="content-card">
+      <div class="section-header flex-column flex-md-row align-items-md-center gap-2">
+        <div>
+          <h5 class="section-title mb-0"><i class="fas fa-database text-primary me-2"></i>Interactive Cohort Patient Explorer</h5>
+          <span class="text-muted small" id="totalPatientsCount">Loading patient records...</span>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <select id="filterTier" class="form-select form-select-sm" style="width: auto;">
+            <option value="">All Risk Tiers</option>
+            <option value="Low">Low Risk</option>
+            <option value="Moderate">Moderate Risk</option>
+            <option value="High">High Risk</option>
+            <option value="Critical">Critical Risk</option>
+          </select>
+          <select id="filterGender" class="form-select form-select-sm" style="width: auto;">
+            <option value="">All Genders</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <select id="filterAge" class="form-select form-select-sm" style="width: auto;">
+            <option value="">All Age Groups</option>
+            <option value="18-30">18-30</option>
+            <option value="31-45">31-45</option>
+            <option value="46-60">46-60</option>
+            <option value="61-80">61-80</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>Patient ID</th>
+              <th>Age (Group)</th>
+              <th>Gender</th>
+              <th>BMI</th>
+              <th>Blood Pressure</th>
+              <th>Glucose</th>
+              <th>Chronic Conditions</th>
+              <th>Calibrated Score</th>
+              <th>Risk Tier</th>
+            </tr>
+          </thead>
+          <tbody id="patientTableBody">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+        <span class="text-muted small" id="pageIndicator">Page 1</span>
+        <div class="btn-group btn-group-sm">
+          <button id="btnPrevPage" class="btn btn-outline-secondary"><i class="fas fa-chevron-left me-1"></i>Previous</button>
+          <button id="btnNextPage" class="btn btn-outline-secondary">Next<i class="fas fa-chevron-right ms-1"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

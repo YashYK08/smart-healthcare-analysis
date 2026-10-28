@@ -1,0 +1,59 @@
+{
+  "total_patients": 5000,
+  "total_features": 31,
+  "raw_health_risk_score_constant": true,
+  "raw_health_risk_score_value": 100.0,
+  "gender_distribution": {
+    "Female": 2506,
+    "Male": 2494
+  },
+  "age_metrics": {
+    "min": 18,
+    "max": 79,
+    "mean": 48.81,
+    "median": 49
+  },
+  "disease_prevalence": {
+    "heart_disease_cases": 1499,
+    "heart_disease_pct": 29.98,
+    "diabetes_cases": 1746,
+    "diabetes_pct": 34.92,
+    "stroke_cases": 1243,
+    "stroke_pct": 24.86,
+    "comorbidity_cases": 1496,
+    "comorbidity_pct": 29.92
+  },
+  "risk_tier_distribution": {
+    "Low": 2176,
+    "Moderate": 1308,
+    "High": 865,
+    "Critical": 651
+  },
+  "calibrated_risk_score_metrics": {
+    "min": 3.2,
+    "max": 94.4,
+    "mean": 44.55,
+    "median": 37.2,
+    "std": 20.82
+  },
+  "age_group_prevalence": {
+    "heart_disease": {
+      "18-30": 0.0,
+      "31-45": 0.0,
+      "46-60": 0.0783,
+      "61-80": 0.8943
+    },
+    "diabetes": {
+      "18-30": 0.0,
+      "31-45": 0.0,
+      "46-60": 0.1457,
+      "61-80": 1.0
+    },
+    "stroke": {
+      "18-30": 0.0,
+      "31-45": 0.0,
+      "46-60": 0.0,
+      "61-80": 0.7912
+    }
+  }
+}

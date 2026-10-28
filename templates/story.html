@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Analytical Story | Smart Healthcare Analytics{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+      <div>
+        <h3 class="fw-bold text-dark mb-1"><i class="fas fa-book-medical text-success me-2"></i>Tableau Analytical Story: Clinical Risk Progression Arc</h3>
+        <p class="text-muted small mb-0">A 4-part analytical narrative tracing population risk from anomaly detection to actionable clinical interventions.</p>
+      </div>
+      <div>
+        <span class="badge bg-dark py-2 px-3 fs-6" id="storyProgressText">Scene 1 of 4</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-12">
+    <!-- Story Container -->
+    <div id="storyContainer" class="story-scene-container">
+      <!-- Story Controls & Navigation Tabs -->
+      <div class="bg-light p-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="d-flex gap-2">
+          <button id="stepDot-1" class="btn btn-sm btn-primary fw-bold px-3">1. Cohort & Data Audit</button>
+          <button id="stepDot-2" class="btn btn-sm btn-outline-secondary fw-bold px-3">2. Age Inflection Surge</button>
+          <button id="stepDot-3" class="btn btn-sm btn-outline-secondary fw-bold px-3">3. Biomarkers & Lifestyle</button>
+          <button id="stepDot-4" class="btn btn-sm btn-outline-secondary fw-bold px-3">4. Clinical Action Plan</button>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="btnPrevScene" class="btn btn-sm btn-outline-dark" disabled><i class="fas fa-arrow-left me-1"></i>Previous</button>
+          <button id="btnNextScene" class="btn btn-sm btn-primary">Next<i class="fas fa-arrow-right ms-1"></i></button>
+        </div>
+      </div>
+
+      <!-- Scene 1: Cohort Overview & Constant Score Diagnosis -->
+      <div id="scene-1" class="p-4">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-7">
+            <span class="badge bg-danger mb-2">Scene 1: Data Integrity & Ground Truth</span>
+            <h4 class="fw-bold text-dark">Baseline Demographics & The 100.0 Score Anomaly</h4>
+            <p class="text-muted">
+              The project initiated by auditing <strong>5,000 raw patient records</strong>. While core biometric fields (age, systolic blood pressure, fasting glucose, BMI) were robustly captured with zero missing values, data validation exposed a major anomaly:
+            </p>
+            <div class="alert alert-warning border-warning">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <strong>Critical Finding:</strong> The raw column <code>health_risk_score</code> was found to be identically <strong>100.0</strong> across all 5,000 records (Variance = 0.0), rendering it mathematically useless for risk differentiation.
+            </div>
+            <p class="text-muted">
+              Rather than ignoring the defect or inventing synthetic numbers, our research team engineered an authentic, multi-factorial <strong>Calibrated Health Risk Score (0 - 100)</strong> based on clinical guidelines (AHA, ADA, WHO). This score restores full predictive variance (Mean: 44.55, Std: 20.82) and permits true patient stratification.
+            </p>
+            <div class="d-flex gap-3">
+              <div class="p-2 bg-light border rounded text-center flex-fill">
+                <span class="text-muted small">Cohort Total</span>
+                <h5 class="fw-bold mb-0">5,000</h5>
+              </div>
+              <div class="p-2 bg-light border rounded text-center flex-fill">
+                <span class="text-muted small">Gender Balance</span>
+                <h5 class="fw-bold mb-0">50.1% F / 49.9% M</h5>
+              </div>
+              <div class="p-2 bg-light border rounded text-center flex-fill">
+                <span class="text-muted small">Age Span</span>
+                <h5 class="fw-bold mb-0">18 - 79 yrs</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <img src="{{ url_for('static', filename='img/visualizations/fig2_calibrated_risk_distribution.png') }}" class="img-fluid rounded border shadow-sm" alt="Calibrated Risk Score">
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 2: The Age Inflection Point & Multi-Morbidity Surge -->
+      <div id="scene-2" class="p-4 d-none">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-7">
+            <span class="badge bg-primary mb-2">Scene 2: Epidemiological Trajectory</span>
+            <h4 class="fw-bold text-dark">The Age 45 Inflection Point & The Triad Comorbidity Wave</h4>
+            <p class="text-muted">
+              Cross-stratifying patient age against chronic conditions reveals a striking clinical pattern:
+            </p>
+            <ul class="text-muted">
+              <li><strong>Young Cohort (18 - 45 yrs):</strong> Effectively 0% chronic disease incidence. This group represents a pure prevention window.</li>
+              <li><strong>Onset Stage (46 - 60 yrs):</strong> Initial emergence of diabetes (14.6%) and heart disease (7.8%), marking early metabolic breakdown.</li>
+              <li><strong>Elderly Surge (61 - 80 yrs):</strong> Massive comorbidity cascade: <strong>89.4% Heart Disease</strong>, <strong>100% Diabetes</strong>, and <strong>79.1% Stroke</strong>.</li>
+            </ul>
+            <div class="p-3 bg-light rounded border">
+              <h6 class="fw-bold text-danger mb-1"><i class="fas fa-layer-group me-2"></i>Multi-Morbidity Syndrome</h6>
+              <p class="small text-muted mb-0">
+                Over <strong>1,207 patients (24.1%)</strong> in our cohort carry the catastrophic triple burden of cardiovascular disease, diabetes mellitus, and cerebrovascular stroke simultaneously.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <img src="{{ url_for('static', filename='img/visualizations/fig1_disease_prevalence_by_age.png') }}" class="img-fluid rounded border shadow-sm" alt="Disease Prevalence by Age">
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 3: Modifiable Lifestyle & Biomarker Drivers -->
+      <div id="scene-3" class="p-4 d-none">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-7">
+            <span class="badge bg-warning text-dark mb-2">Scene 3: Modifiable Drivers</span>
+            <h4 class="fw-bold text-dark">Biomarkers, Lifestyle Catalysts & Compounding Risks</h4>
+            <p class="text-muted">
+              Age is an unmodifiable factor, but clinical biomarkers and daily behavioral patterns dictate who deteriorates fastest:
+            </p>
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <div class="p-3 bg-light rounded border h-100">
+                  <span class="fw-bold text-dark d-block mb-1"><i class="fas fa-heart-pulse text-danger me-1"></i>Hypertension & Lipids</span>
+                  <p class="small text-muted mb-0">Systolic BP &ge; 140 mmHg and cholesterol &ge; 240 mg/dL independently amplify adverse vascular event risk by 2.4x.</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 bg-light rounded border h-100">
+                  <span class="fw-bold text-dark d-block mb-1"><i class="fas fa-person-running text-success me-1"></i>Physical Activity Protection</span>
+                  <p class="small text-muted mb-0">Patients engaging in active exercise (level 2) show significantly lower cardiovascular disease progression across all tiers.</p>
+                </div>
+              </div>
+            </div>
+            <p class="text-muted small">
+              Our analysis proves that smoking cessation paired with moderate weekly aerobic exercise can counteract biomarker elevation in borderline patients before irreversible disease sets in.
+            </p>
+          </div>
+          <div class="col-lg-5">
+            <img src="{{ url_for('static', filename='img/visualizations/fig6_blood_pressure_vs_glucose_by_tier.png') }}" class="img-fluid rounded border shadow-sm" alt="BP vs Glucose">
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 4: High-Risk Cohort Identification & Intervention Strategy -->
+      <div id="scene-4" class="p-4 d-none">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-7">
+            <span class="badge bg-success mb-2">Scene 4: Clinical Translation</span>
+            <h4 class="fw-bold text-dark">4-Tier Risk Stratification & Targeted Intervention Roadmap</h4>
+            <p class="text-muted">
+              Translating data insights into clinical care delivery requires distinct protocol tiers:
+            </p>
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered small">
+                <thead class="table-light">
+                  <tr>
+                    <th>Tier</th>
+                    <th>Cohort Count</th>
+                    <th>Care Strategy & Clinical Protocol</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-success">
+                    <td class="fw-bold">Low (<35)</td>
+                    <td>2,176 (43.5%)</td>
+                    <td>Primary prevention, digital wellness app tracking, annual wellness checkups.</td>
+                  </tr>
+                  <tr class="table-info">
+                    <td class="fw-bold">Moderate (35-54)</td>
+                    <td>1,308 (26.2%)</td>
+                    <td>Lifestyle modification coaching, sodium restriction, biannual HbA1c/BP monitoring.</td>
+                  </tr>
+                  <tr class="table-warning">
+                    <td class="fw-bold">High (55-74)</td>
+                    <td>865 (17.3%)</td>
+                    <td>Primary care physician intervention, anti-hypertensive & statin titration.</td>
+                  </tr>
+                  <tr class="table-danger">
+                    <td class="fw-bold">Critical (&ge;75)</td>
+                    <td>651 (13.0%)</td>
+                    <td>Immediate specialist referral (Cardiology/Endocrinology), intensive multi-morbidity management.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center mt-3">
+              <a href="{{ url_for('calculator') }}" class="btn btn-warning fw-bold px-4">
+                <i class="fas fa-calculator me-1"></i> Try the Interactive Patient Risk Calculator &rarr;
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <img src="{{ url_for('static', filename='img/visualizations/fig5_comorbidity_trivariate_overlap.png') }}" class="img-fluid rounded border shadow-sm" alt="Comorbidity Breakdown">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
